@@ -14,13 +14,18 @@ df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
 # Count invoices per date and sort by date
 date_counts = df['InvoiceDate'].dt.date.value_counts().sort_index()
 
-# Check basic info
-# print(df.shape)
-# print(df.head())
-# print(df.info())
-# print(df.describe())
-# print(df.columns)
-# print(df.isnull().sum())
+# explain what all the commands below do
+# Check basic info 
+# print(df.shape) # prints the number of rows and columns in the dataframe
+# print(df.head())  # prints the first 5 rows of the dataframe
+# print(df.info()) # prints the summary of the dataframe including data types and non-null counts
+# print(df.describe())  # prints the summary statistics of the dataframe
+# print(df.columns)  # prints the column names of the dataframe
+# print(df.isnull().sum())  # prints the count of missing values in each column
+# print(df.duplicated().sum())  # prints the count of duplicate rows in the dataframe
+# print(df.nunique())  # prints the count of unique values in each column
+# print(df['Country'].unique())  # prints the unique values in the 'Country' column
+# print(df['Country'].value_counts())  # prints the count of unique values in the 'Country' column sorted by count
 
 # Correct column selection
 df_selected = df[['StockCode', 'Quantity', 'InvoiceDate', 'UnitPrice', 'CustomerID', 'Country']]
@@ -34,4 +39,6 @@ plt.ylabel('Number of Invoices')
 plt.xticks(rotation=45)
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+# plt.show()
+
+print(df.describe(include='all'))
