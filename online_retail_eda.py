@@ -6,13 +6,14 @@ plt.style.use('ggplot')
 
 pd.set_option('display.max_columns', 200)
 
-df = pd.read_csv('online_retail.csv')
+df = pd.read_csv('online_retail.csv')  # reads the CSV file into a Pandas DataFrame
 
 # Convert InvoiceDate to datetime
-df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
+df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])  # converts the 'InvoiceDate' column to datetime format
 
 # Count invoices per date and sort by date
-date_counts = df['InvoiceDate'].dt.date.value_counts().sort_index()
+date_counts = df['InvoiceDate'].dt.date.value_counts().sort_index()  
+# extracts the date part of 'InvoiceDate', counts the number of occurrences for each date, and sorts by date
 
 # explain what all the commands below do
 # Check basic info 
@@ -28,17 +29,19 @@ date_counts = df['InvoiceDate'].dt.date.value_counts().sort_index()
 # print(df['Country'].value_counts())  # prints the count of unique values in the 'Country' column sorted by count
 
 # Correct column selection
-df_selected = df[['StockCode', 'Quantity', 'InvoiceDate', 'UnitPrice', 'CustomerID', 'Country']]
+df_selected = df[['StockCode', 'Quantity', 'InvoiceDate', 'UnitPrice', 'CustomerID', 'Country']]  
+# selects specific columns from the dataframe for further analysis
 
 # Plot
-plt.figure(figsize=(12, 6))
-date_counts.plot(kind='line', color='blue', alpha=0.7)
-plt.title('Number of Invoices Over Time')
-plt.xlabel('Invoice Date')
-plt.ylabel('Number of Invoices')
-plt.xticks(rotation=45)
-plt.grid(True)
-plt.tight_layout()
-# plt.show()
+plt.figure(figsize=(12, 6))  # sets the figure size for the plot
+date_counts.plot(kind='line', color='blue', alpha=0.7)  
+# plots the number of invoices over time as a line plot with blue color and 70% opacity
+plt.title('Number of Invoices Over Time')  # sets the title of the plot
+plt.xlabel('Invoice Date')  # sets the label for the x-axis
+plt.ylabel('Number of Invoices')  # sets the label for the y-axis
+plt.xticks(rotation=45)  # rotates the x-axis labels by 45 degrees for better readability
+plt.grid(True)  # adds a grid to the plot
+plt.tight_layout()  # adjusts the layout to prevent overlapping of elements
+# plt.show()  # displays the plot (commented out)
 
-print(df.describe(include='all'))
+print(df.describe(include='all'))  # prints the summary statistics for all columns, including non-numeric ones
