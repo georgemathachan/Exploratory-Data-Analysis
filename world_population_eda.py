@@ -15,22 +15,51 @@ df = pd.read_csv('world_population.csv')  # reads the CSV file into a Pandas Dat
 #'1980 Population', '1970 Population', 'Area (km²)', 'Density (per km²)',
 #'Growth Rate', 'World Population Percentage']
 
-# Select only numeric columns
-numeric_df = df.select_dtypes(include=[np.number])
-
-# Now compute the correlation matrix
-corr = numeric_df.corr()
-
-# Optional: display the correlation matrix as a heatmap
-plt.figure(figsize=(12, 8))
-sns.heatmap(corr, annot=True,  fmt='.2f', linewidths=0.5)
-plt.title('Correlation Heatmap of World Population Data')
-# plt.show()
+##################################
+############## 1 #################
+##################################
+######## Dataset Overview ########
+##################################
 
 
-# print(df.groupby('Continent')[df.select_dtypes(include=[np.number]).columns].mean())
 
-# print(df['Continent'].str.contains('Oceania').sum())  # prints the number of countries in Oceania
+#################################
+############## 2 ################
+#################################
+######## Top-Level Stats ########
+#################################
 
-# print(df[df['Continent'].str.contains('Oceania')]) # print all entries from oceania
 
+##################################
+############## 3 #################
+##################################
+### Growth Analysis Over Time ####
+##################################
+
+
+##################################
+############## 4 #################
+##################################
+#### Continent-Level Analysis ####
+##################################
+
+
+##################################
+############## 5 #################
+##################################
+######### Area & Density #########
+##################################
+
+
+##################################
+############## 6 #################
+##################################
+###### Correlation Analysis ######
+##################################
+
+
+##################################
+############## 7 #################
+##################################
+######## Custom Insights #########
+##################################
