@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>World Population Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>World Population Dashboard</h1>
+
+  <section>
+    <h2>Top 10 Most Populous Countries (2022)</h2>
+    <canvas id="populousChart"></canvas>
+  </section>
+
+  <section>
+    <h2>Global Population Trend (1970 → 2022)</h2>
+    <canvas id="trendChart"></canvas>
+  </section>
+
+  <section>
+    <h2>Population by Continent</h2>
+    <canvas id="continentChart"></canvas>
+  </section>
+
+  <section>
+    <h2>Area vs Population</h2>
+    <canvas id="scatterChart"></canvas>
+  </section>
+
+  <section>
+    <h2>Correlation Heatmap</h2>
+    <img id="heatmapImage" src="output/heatmap.png" alt="Correlation Heatmap" />
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
