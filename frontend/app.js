@@ -1,3 +1,5 @@
+// python3 -m http.server 8000 to run server
+
 // Fetch and render top 10 populous countries
 fetch('../output/top_10_populous.json')
   .then(res => res.json())
