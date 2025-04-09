@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDA Results</title>
+    <title>Retail EDA Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="app.js"></script>
 </head>
 <body>
-    <h1>Exploratory Data Analysis Results</h1>
-    <section id="results">
+    <h1>Retail EDA Dashboard</h1>
+
+    <section>
         <h2>Summary</h2>
         <ul id="summary"></ul>
     </section>
-    <section id="charts">
+
+    <section>
         <h2>Charts</h2>
-        <canvas id="salesByCountryChart"></canvas>
-        <canvas id="topProductsChart"></canvas>
+        <div>
+            <h3>Sales by Country</h3>
+            <canvas id="salesByCountryChart"></canvas>
+        </div>
+        <div>
+            <h3>Top Products</h3>
+            <canvas id="topProductsChart"></canvas>
+        </div>
     </section>
 </body>
 </html>
