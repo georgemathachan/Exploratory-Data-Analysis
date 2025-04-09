@@ -12,7 +12,7 @@ os.makedirs("output", exist_ok=True)
 
 pd.set_option('display.max_columns', 200)
 
-df = pd.read_csv('world_population.csv')  # reads the CSV file into a Pandas DataFrame
+df = pd.read_csv('Population/world_population.csv')  # reads the CSV file into a Pandas DataFrame
 
 # column names: 
 #['Rank', 'CCA3', 'Country/Territory', 'Capital', 'Continent',
