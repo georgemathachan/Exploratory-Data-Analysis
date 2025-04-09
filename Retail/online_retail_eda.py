@@ -2,46 +2,161 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
-plt.style.use('ggplot')
+from wordcloud import WordCloud
+import os
 
+plt.style.use('ggplot')
 pd.set_option('display.max_columns', 200)
 
-df = pd.read_csv('online_retail.csv')  # reads the CSV file into a Pandas DataFrame
+# Load the dataset
+df = pd.read_csv('Retail/online_retail.csv')  # reads the CSV file into a Pandas DataFrame
 
-# Convert InvoiceDate to datetime
-df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])  # converts the 'InvoiceDate' column to datetime format
+# Columns Titles: ['InvoiceNo', 'StockCode', 'Description', 'Quantity', 'InvoiceDate', 'UnitPrice', 'CustomerID', 'Country']
 
-# Count invoices per date and sort by date
-date_counts = df['InvoiceDate'].dt.date.value_counts().sort_index()  
-# extracts the date part of 'InvoiceDate', counts the number of occurrences for each date, and sorts by date
+# 1. InvoiceNo
+# Count of total invoices
+total_invoices = df['InvoiceNo'].nunique()
+print(f"Total number of invoices: {total_invoices}")
 
-# explain what all the commands below do
-# Check basic info 
-# print(df.shape) # prints the number of rows and columns in the dataframe
-# print(df.head())  # prints the first 5 rows of the dataframe
-# print(df.info()) # prints the summary of the dataframe including data types and non-null counts
-# print(df.describe())  # prints the summary statistics of the dataframe
-# print(df.columns)  # prints the column names of the dataframe
-# print(df.isnull().sum())  # prints the count of missing values in each column
-# print(df.duplicated().sum())  # prints the count of duplicate rows in the dataframe
-# print(df.nunique())  # prints the count of unique values in each column
-# print(df['Country'].unique())  # prints the unique values in the 'Country' column
-# print(df['Country'].value_counts())  # prints the count of unique values in the 'Country' column sorted by count
+# Number of canceled orders (InvoiceNo starting with 'C')
+canceled_orders = df[df['InvoiceNo'].str.startswith('C')].shape[0]
+print(f"Number of canceled orders: {canceled_orders}")
 
-# Correct column selection
-df_selected = df[['StockCode', 'Quantity', 'InvoiceDate', 'UnitPrice', 'CustomerID', 'Country']]  
-# selects specific columns from the dataframe for further analysis
+# Trend of transactions over time
+df['InvoiceDate'] = pd.to_datetime(df['InvoiceDate'])
+df['InvoiceDay'] = df['InvoiceDate'].dt.date
+invoices_per_day = df.groupby('InvoiceDay')['InvoiceNo'].nunique()
 
-# Plot
-plt.figure(figsize=(12, 6))  # sets the figure size for the plot
-date_counts.plot(kind='line', color='blue', alpha=0.7)  
-# plots the number of invoices over time as a line plot with blue color and 70% opacity
-plt.title('Number of Invoices Over Time')  # sets the title of the plot
-plt.xlabel('Invoice Date')  # sets the label for the x-axis
-plt.ylabel('Number of Invoices')  # sets the label for the y-axis
-plt.xticks(rotation=45)  # rotates the x-axis labels by 45 degrees for better readability
-plt.grid(True)  # adds a grid to the plot
-plt.tight_layout()  # adjusts the layout to prevent overlapping of elements
-# plt.show()  # displays the plot (commented out)
+# Plot: Bar chart of invoices per day
+plt.figure(figsize=(12, 6))
+invoices_per_day.plot(kind='bar', color='blue', alpha=0.7)
+plt.title('Number of Invoices Per Day')
+plt.xlabel('Date')
+plt.ylabel('Number of Invoices')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
 
-print(df.describe(include='all'))  # prints the summary statistics for all columns, including non-numeric ones
+# 2. StockCode
+# Count of unique products
+unique_products = df['StockCode'].nunique()
+print(f"Number of unique products: {unique_products}")
+
+# Frequency distribution of most sold products
+top_products = df['StockCode'].value_counts().head(10)
+print("Top 10 most sold products:")
+print(top_products)
+
+# Plot: Bar chart of top 10 sold product codes
+plt.figure(figsize=(10, 6))
+top_products.plot(kind='bar', color='green', alpha=0.7)
+plt.title('Top 10 Sold Product Codes')
+plt.xlabel('StockCode')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+
+# 3. Description
+# Top 10 best-selling items
+top_descriptions = df.groupby('Description')['Quantity'].sum().sort_values(ascending=False).head(10)
+print("Top 10 best-selling items:")
+print(top_descriptions)
+
+# Missing descriptions
+missing_descriptions = df['Description'].isnull().sum()
+print(f"Number of missing descriptions: {missing_descriptions}")
+
+# Plot: Word cloud of product names
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(df['Description'].dropna()))
+plt.figure(figsize=(10, 6))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.title('Word Cloud of Product Descriptions')
+plt.show()
+
+# 4. Quantity
+# Total quantity sold
+total_quantity = df['Quantity'].sum()
+print(f"Total quantity sold: {total_quantity}")
+
+# Negative quantities (returns)
+negative_quantities = df[df['Quantity'] < 0].shape[0]
+print(f"Number of negative quantities (returns): {negative_quantities}")
+
+# Plot: Histogram of quantities
+plt.figure(figsize=(10, 6))
+sns.histplot(df['Quantity'], bins=50, kde=False, color='purple')
+plt.title('Distribution of Quantities')
+plt.xlabel('Quantity')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+
+# 5. InvoiceDate
+# Sales trend over time (daily)
+daily_sales = df.groupby('InvoiceDay')['Quantity'].sum()
+
+# Plot: Line plot of sales trend
+plt.figure(figsize=(12, 6))
+daily_sales.plot(kind='line', color='orange', alpha=0.8)
+plt.title('Sales Trend Over Time')
+plt.xlabel('Date')
+plt.ylabel('Total Quantity Sold')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# 6. UnitPrice
+# Price distribution
+plt.figure(figsize=(10, 6))
+sns.histplot(df['UnitPrice'], bins=50, kde=True, color='red')
+plt.title('Distribution of Unit Prices')
+plt.xlabel('Unit Price')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+
+# 7. CustomerID
+# Number of unique customers
+unique_customers = df['CustomerID'].nunique()
+print(f"Number of unique customers: {unique_customers}")
+
+# Frequency of purchases per customer
+customer_purchases = df['CustomerID'].value_counts()
+
+# Plot: Histogram of number of purchases per customer
+plt.figure(figsize=(10, 6))
+sns.histplot(customer_purchases, bins=50, kde=False, color='blue')
+plt.title('Number of Purchases Per Customer')
+plt.xlabel('Number of Purchases')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+
+# 8. Country
+# Sales by country
+sales_by_country = df.groupby('Country')['Quantity'].sum().sort_values(ascending=False)
+
+# Plot: Bar chart of sales by country
+plt.figure(figsize=(12, 6))
+sales_by_country.plot(kind='bar', color='cyan', alpha=0.7)
+plt.title('Sales by Country')
+plt.xlabel('Country')
+plt.ylabel('Total Quantity Sold')
+plt.tight_layout()
+plt.show()
+
+# Additional Metrics
+# Total Revenue = Quantity * UnitPrice
+df['Revenue'] = df['Quantity'] * df['UnitPrice']
+total_revenue = df['Revenue'].sum()
+print(f"Total revenue: {total_revenue}")
+
+# Top customers by revenue
+top_customers = df.groupby('CustomerID')['Revenue'].sum().sort_values(ascending=False).head(10)
+print("Top 10 customers by revenue:")
+print(top_customers)
+
+# Product Return Rate = ratio of negative Quantity to total transactions
+return_rate = negative_quantities / df.shape[0]
+print(f"Product return rate: {return_rate:.2%}")
